@@ -1,4 +1,6 @@
 # AZON_Python_Bot
+WARNING: according to https://giveaway.amazon.com/rules If your entry is incomplete or if you use robotic, automatic, programmed or similar entry methods, your entry will be disqualified.
+
 Learning some Pythons by making an amazon giveaway bot
 
 This one uses main giveaway site and some fancy python to not need mouse and keyboard control
