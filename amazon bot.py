@@ -101,6 +101,10 @@ def get_giveaway_type():
 def check_win():
 	global wins
 	while browser.title == "Amazon Giveaways" :
+		giveaway_type = browser.find_elements_by_name('addToCart')
+		if giveaway_type != [] :
+			browser.back()
+			break
 		time.sleep(7) #wait for box to see if won
 		did_win = browser.find_elements_by_name('ClaimMyPrize')
 		if did_win != [] : #claim prize
@@ -140,6 +144,7 @@ while times > 0:
 	get_giveaway()
 	click_giveaway()
 	get_giveaway_type()
+	print("Entered " + str(entered) + " giveaways | " + str(times) + " giveaways remaining")
 
 print("Tried to enter " + str(entered) + " giveaways")
 print("You won " + str(wins) + " times")
