@@ -27,6 +27,21 @@ def click_giveaway():
 		
 def login():
 	browser.get('https://www.amazon.com/gp/sign-in.html')
+	password = browser.find_elements_by_id("ap_password")
+	try:
+		if password != []: #single page login
+			user = browser.find_element_by_id("ap_email")
+			file = open("login.txt", "r")
+			file.readline()#ignore line one
+			user.send_keys(file.readline())
+			file.readline()#ignore line two
+			password = browser.find_element_by_id("ap_password")
+			password.send_keys(file.readline())
+			browser.find_element_by_id("signInSubmit").click()
+			file.close()
+			return
+	except:
+		print("")
 	try: #look for login.txt and use info login
 		user = browser.find_element_by_id("ap_email")
 		file = open("login.txt", "r")
@@ -137,6 +152,7 @@ def check_loss():
 			break
 
 login()
+print ("\n" * 100) #"clear" screen
 browser.get('https://www.amazon.com/ga/giveaways')
 while times > 0:
 	times = times - 1
