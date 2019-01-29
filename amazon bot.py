@@ -11,29 +11,31 @@ times = int(times)
 def get_giveaway():
 	global giveaway
 	global giveaway_number
+	time.sleep(.5)
 	giveaway_number += 1
+	print('Found giveaway '+str(giveaway_number))
 	if giveaway_number == 25 : #reset giveaway_number because there is only 24 giveaways per page
 		giveaway_number = 1
 		time.sleep(1)
 		browser.find_element_by_partial_link_text('Next').click()
-	while browser.title == "Giveaways" :
-		if check_page == 'old' :
-			giveaway = browser.find_element_by_id('giveaway-item-'+str(giveaway_number))
-			break
-		else :
-			giveaway = browser.find_elements_by_class_name('a-link-normal.item-link')
-			break
+	if check_page == 'old' :
+		giveaway = browser.find_element_by_id('giveaway-item-'+str(giveaway_number))
+		return
+	else :
+		giveaway = browser.find_elements_by_class_name('a-link-normal.item-link')
+		return
 
 def click_giveaway():
-	while browser.title == "Giveaways" :
-		if check_page == "old" :
-			giveaway.click()
-			break
-		else :
-			giveaway(giveaway_number).click()
-			break
+	print('Clicking giveaway '+str(giveaway_number))
+	if check_page == "old" :
+		giveaway.click()
+		return
+	else :
+		giveaway[(giveaway_number)].click()
+		return
 		
 def login():
+	print ("\n" * 100) #"clear" screen
 	browser.get('https://www.amazon.com/gp/sign-in.html')
 	password = browser.find_elements_by_id("ap_password")
 	try:
@@ -55,14 +57,18 @@ def login():
 	except:
 		print("")
 	try: #look for login.txt and use info login
+		print('Multipage login')
 		user = browser.find_element_by_id("ap_email")
 		file = open("login.txt", "r")
 		file.readline()#ignore line one
+		print('Entering user')
 		user.send_keys(file.readline())
 		browser.find_element_by_id("continue").click()
 		file.readline()#ignore line two
 		password = browser.find_element_by_id("ap_password")
+		print('Entering password')
 		password.send_keys(file.readline())
+		print('signing in')
 		browser.find_element_by_id("signInSubmit").click()
 		file.close()
 	except: #cant find login.txt or entered wrong wait for them to enter it
@@ -127,7 +133,7 @@ def get_giveaway_type():
 			break
 		#nothing found go back
 		else:
-			print('I dont even know...')
+			print('might have ended, or asking for captcha')
 			browser.back()
 			break
 			
@@ -172,17 +178,17 @@ def check_loss():
 # For some reason there is two different types of giveaway pages, lets see which one we get
 def check_giveaway_page():
 	global check_page
-	#check_page = "old"
-	check_page = browser.find_elements_by_class_name('a-link-normal.item-link')
-	if check_page == [] :
+	time.sleep(.5)
+	if browser.title == "Giveaways" :
+		print('Looks like we got an old page')
 		check_page = "old"
 		return
 	else :
+		print('Looks like we got a new page')
 		check_page = "new"
 		return
 
 login()
-print ("\n" * 100) #"clear" screen
 browser.get('https://www.amazon.com/ga/giveaways')
 while times > 0:
 	times = times - 1
