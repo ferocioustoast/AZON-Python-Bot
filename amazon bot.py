@@ -9,6 +9,8 @@ times = input('How many Giveaways do you want to enter?') #get number of giveawa
 times = int(times)
 
 def get_giveaway():
+	if browser.title == "Your Account" :
+		browser.get('https://www.amazon.com/ga/giveaways')
 	global giveaway
 	global giveaway_number
 	giveaway_number += 1
@@ -159,8 +161,6 @@ def check_loss():
 
 login()
 print ("\n" * 100) #"clear" screen
-if browser.title == "Your Account" :
-	browser.get('https://www.amazon.com/ga/giveaways')
 while times > 0:
 	times = times - 1
 	entered += 1
