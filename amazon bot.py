@@ -65,11 +65,13 @@ def get_giveaway_type():
 		#look for add to cart button to skip ones already done
 		giveaway_type = browser.find_elements_by_name('addToCart')
 		if giveaway_type != [] :
+			print('Looks like we already did this one.')
 			browser.back()
 			break
-		#check for youtube video if so wait 30 secounds then click
+		#check for youtube video if so wait 30 seconds then click
 		giveaway_type = browser.find_elements_by_id('enter-youtube-video-button-announce')
 		if giveaway_type != [] :
+			print('Looks like a YouTube video waiting 30 seconds')
 			time.sleep(30)
 			giveaway_type = browser.find_element_by_id('videoSubmitForm')
 			giveaway_type.click()
@@ -81,6 +83,7 @@ def get_giveaway_type():
 		#check for instant enter button, click it
 		giveaway_type = browser.find_elements_by_name('enter')
 		if giveaway_type != [] :
+			print('instant enter')
 			giveaway_type = browser.find_element_by_name('enter')
 			giveaway_type.click()
 			check_win()
@@ -89,6 +92,7 @@ def get_giveaway_type():
 		#check for box, click it
 		giveaway_type = browser.find_elements_by_id('box_click_target')
 		if giveaway_type != [] :
+			print('box target, clicking')
 			giveaway_type = browser.find_element_by_id('box_click_target')
 			giveaway_type.click()
 			check_win()
@@ -97,6 +101,7 @@ def get_giveaway_type():
 		#check for amazon video, click it. cant seem to mute
 		giveaway_type = browser.find_elements_by_id('airy-container')
 		if giveaway_type != [] :
+			print('Amazon video waiting 30 seconds')
 			giveaway_type = browser.find_element_by_id('airy-container')
 			giveaway_type.click()
 			# browser.find_element_by_class_name('airy-audio-elements').click()
@@ -110,6 +115,7 @@ def get_giveaway_type():
 			break
 		#nothing found go back
 		else:
+			print('I dont even know...')
 			browser.back()
 			break
 			
@@ -153,7 +159,8 @@ def check_loss():
 
 login()
 print ("\n" * 100) #"clear" screen
-browser.get('https://www.amazon.com/ga/giveaways')
+if browser.title == "Your Account" :
+	browser.get('https://www.amazon.com/ga/giveaways')
 while times > 0:
 	times = times - 1
 	entered += 1
