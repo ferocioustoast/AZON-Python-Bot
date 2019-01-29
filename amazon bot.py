@@ -20,13 +20,20 @@ def get_giveaway():
 		time.sleep(1)
 		browser.find_element_by_partial_link_text('Next').click()
 	while browser.title == "Giveaways" :
-		giveaway = browser.find_element_by_id('giveaway-item-'+str(giveaway_number))
-		break
+		if check_page == 'old' :
+			giveaway = browser.find_element_by_id('giveaway-item-'+str(giveaway_number))
+		else :
+			giveaway = browser.find_elements_by_class_name('a-link-normal.item-link')
+			break
 
 def click_giveaway():
 	while browser.title == "Giveaways" :
-		giveaway.click()
-		break
+		if check_page == 'old' :
+			giveaway.click()
+			break
+		else :
+			giveaway[(giveaway_number)].click()
+			break
 		
 def login():
 	browser.get('https://www.amazon.com/gp/sign-in.html')
@@ -159,12 +166,27 @@ def check_loss():
 		else :
 			time.sleep(2)
 			break
+			
+# For some reason there is two different types of giveaway pages, lets see which one we get
+def check_giveaway_page():
+	global check_page
+	check_page = 'old'
+	browser.get('https://www.amazon.com/ga/giveaways')
+	check_page = browser.find_elements_by_class_name('a-link-normal.item-link')
+	while browser.title == "Amazon Giveaways" :
+		if check_page != [] :
+			check_page == 'new'
+			break
+		else :
+			check_page == 'old'
+			break
 
 login()
 print ("\n" * 100) #"clear" screen
 while times > 0:
 	times = times - 1
 	entered += 1
+	check_giveaway_page()
 	get_giveaway()
 	click_giveaway()
 	get_giveaway_type()
