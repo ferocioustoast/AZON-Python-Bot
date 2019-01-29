@@ -9,9 +9,6 @@ times = input('How many Giveaways do you want to enter?') #get number of giveawa
 times = int(times)
 
 def get_giveaway():
-	if browser.title == "Your Account" : #possible fix for account page, might also cause loop until giveaway number is reached
-	# could also break second page
-		browser.get('https://www.amazon.com/ga/giveaways')
 	global giveaway
 	global giveaway_number
 	giveaway_number += 1
@@ -22,17 +19,18 @@ def get_giveaway():
 	while browser.title == "Giveaways" :
 		if check_page == 'old' :
 			giveaway = browser.find_element_by_id('giveaway-item-'+str(giveaway_number))
+			break
 		else :
 			giveaway = browser.find_elements_by_class_name('a-link-normal.item-link')
 			break
 
 def click_giveaway():
 	while browser.title == "Giveaways" :
-		if check_page == 'old' :
+		if check_page == "old" :
 			giveaway.click()
 			break
 		else :
-			giveaway[(giveaway_number)].click()
+			giveaway(giveaway_number).click()
 			break
 		
 def login():
@@ -40,14 +38,18 @@ def login():
 	password = browser.find_elements_by_id("ap_password")
 	try:
 		if password != []: #single page login
+			print('single page login')
 			user = browser.find_element_by_id("ap_email")
 			file = open("login.txt", "r")
 			file.readline()#ignore line one
+			print('entering user')
 			user.send_keys(file.readline())
 			file.readline()#ignore line two
 			password = browser.find_element_by_id("ap_password")
+			print('entering password')
 			password.send_keys(file.readline())
 			browser.find_element_by_id("signInSubmit").click()
+			print('signing in')
 			file.close()
 			return
 	except:
@@ -170,19 +172,18 @@ def check_loss():
 # For some reason there is two different types of giveaway pages, lets see which one we get
 def check_giveaway_page():
 	global check_page
-	check_page = 'old'
-	browser.get('https://www.amazon.com/ga/giveaways')
+	#check_page = "old"
 	check_page = browser.find_elements_by_class_name('a-link-normal.item-link')
-	while browser.title == "Amazon Giveaways" :
-		if check_page != [] :
-			check_page == 'new'
-			break
-		else :
-			check_page == 'old'
-			break
+	if check_page == [] :
+		check_page = "old"
+		return
+	else :
+		check_page = "new"
+		return
 
 login()
 print ("\n" * 100) #"clear" screen
+browser.get('https://www.amazon.com/ga/giveaways')
 while times > 0:
 	times = times - 1
 	entered += 1
