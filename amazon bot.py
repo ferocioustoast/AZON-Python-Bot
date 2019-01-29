@@ -9,7 +9,8 @@ times = input('How many Giveaways do you want to enter?') #get number of giveawa
 times = int(times)
 
 def get_giveaway():
-	if browser.title == "Your Account" :
+	if browser.title == "Your Account" : #possible fix for account page, might also cause loop until giveaway number is reached
+	# could also break second page
 		browser.get('https://www.amazon.com/ga/giveaways')
 	global giveaway
 	global giveaway_number
@@ -70,11 +71,11 @@ def get_giveaway_type():
 			print('Looks like we already did this one.')
 			browser.back()
 			break
-		#check for youtube video if so wait 30 seconds then click
+		#check for youtube video if so wait 15 seconds then click
 		giveaway_type = browser.find_elements_by_id('enter-youtube-video-button-announce')
 		if giveaway_type != [] :
-			print('Looks like a YouTube video waiting 30 seconds')
-			time.sleep(30)
+			print('Looks like a YouTube video waiting 15 seconds')
+			time.sleep(15)
 			giveaway_type = browser.find_element_by_id('videoSubmitForm')
 			giveaway_type.click()
 			check_box_target()
@@ -103,11 +104,11 @@ def get_giveaway_type():
 		#check for amazon video, click it. cant seem to mute
 		giveaway_type = browser.find_elements_by_id('airy-container')
 		if giveaway_type != [] :
-			print('Amazon video waiting 30 seconds')
+			print('Amazon video waiting 15 seconds')
 			giveaway_type = browser.find_element_by_id('airy-container')
 			giveaway_type.click()
 			# browser.find_element_by_class_name('airy-audio-elements').click()
-			time.sleep(30)
+			time.sleep(15)
 			giveaway_type = browser.find_element_by_id('videoSubmitForm')
 			giveaway_type.click()
 			check_box_target()
